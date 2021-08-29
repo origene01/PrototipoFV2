@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cacata Puede</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="box-logo">
+            <img src="../../imgs/education-3617221_1280.png" alt="">
+           </div>
+           <h1>Fundación Cacata Puede</h1>
+    </header>
+
+    <nav class="menu">
+        <ul>
+            <li><a href="../../index.html">Inicio</a></li>
+            <li><a href="Curses.html">Cursos</a></li>
+            <li><a href="us.html">Nosotros</a></li>
+            <li style="background: rgb(255, 255, 255); border-radius: 10px 10px 0 0;"><a href="Contact.html"
+                    style="color: #000;">Contacto</a></li>
+            <li><a href="#">Privacidad</a></li>
+        </ul>
+        <div class="hide">
+            <i class="fa fa-bars" aria-hidden="true"></i> Menu
+        </div>
+    </nav>
+    <main class="contenedor">
+        <div class="main_title">
+            <h2>Contacto</h2>
+        </div>
+        <section class="section-form">
+            <div class="container-form">
+                <form action="#" class="form" id="form" autocomplete="off">
+                    <fieldset>
+                        <legend>Send a message</legend>
+                        <div class="block form-header-only">
+                            <h2 class="form-title">contact</h2>
+                            <div class="alert"></div>
+                        </div>
+                        <div class="block">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" placeholder="Name" class="input input-only">
+                        </div>
+                        <div class="block">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" placeholder="Email" class="input input-only">
+                        </div>
+                        <div class="block">
+                            <textarea name="message" id="" cols="12" rows="8" class="input area"
+                                placeholder="Write a message"></textarea>
+                        </div>
+                        <div class="block">
+                            <input type="submit" value="Send" class="submit">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <h3>Fundación Cacata Puede</h3>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sed quos velit!</p>
+            <ul class="socials">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+    <div class="footer-bottom">
+        <p>Copyright &copy;2021 Cacata Puede. </p>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script>
+        $(".hide").on('click', function () {
+            $("nav ul").toggle('slow');
+        });
+        // ----------Menu joso-------------------------
+        $(document).ready(function () {
+            var altura = $('.menu').offset().top;
+            $(window).on('scroll', function () {
+                if ($(window).scrollTop() > altura) {
+                    $('.menu').addClass('menu-fixed');
+                } else {
+                    $('.menu').removeClass('menu-fixed');
+                }
+            });
+
+        });
+
+        (() =>{
+
+        const form = document.getElementById('form');
+        const alert = document.querySelector('.alert');
+        const inputName = form.name;
+        const inputEmail = form.email;
+        const inputArea = form.message;
+
+        const rexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
+        const rexEmail = /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/
+        const rexMessage = /^.{1,255}$/
+
+        const validar = (input, texto,expresion) =>{
+        if (expresion.test(input.value)) {
+        input.classList.remove('error')
+        input.classList.add('success');
+        }else{
+        alert.classList.add('alertError')
+        alert.textContent = texto;
+
+        input.classList.remove('success')
+        input.classList.add('error')
+
+        setTimeout(() => {
+        alert.classList.remove('alertError');
+        alert.textContent = "";
+        }, 5000);
+
+        }
+        }
+
+        inputName.addEventListener('blur', () =>{
+        validar(inputName,'this name is wrong!',rexName);
+        })
+
+        inputEmail.addEventListener('blur', () => {
+        validar(inputEmail,'this email is wrong!',rexEmail);
+        })
+
+        inputArea.addEventListener('blur', () => {
+        validar(inputArea,'This message is wrong!',rexMessage);
+        })
+
+        const send = () =>{
+        fetch("https://formsubmit.co/ajax/spanuwey@gmail.com", {
+        method: "POST",
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        },
+        body: JSON.stringify({name:inputName.value,email:inputEmail.value,message:inputArea.value})
+        })
+        .then(response => response.json())
+        .then(data => {
+        inputName.classList.remove('success','error');
+        inputEmail.classList.remove('success','error');
+        inputArea.classList.remove('success','error');
+        form.reset();
+        })
+        .catch(error => console.log(error));
+        }
+
+        form.addEventListener('submit', e =>{
+        e.preventDefault();
+        if (rexName.test(inputName.value) && rexEmail.test(inputEmail.value) && rexMessage.test(inputArea.value)) {
+
+        send();
+
+        alert.classList.add('alertSuccess')
+        alert.textContent = "Message sent!";
+
+        setTimeout(() => {
+        alert.classList.remove('alertSuccess');
+        alert.textContent = "";
+        }, 5000);
+
+        }else{
+        alert.classList.add('alertError')
+        alert.textContent = "Fill out the form!";
+
+        setTimeout(() => {
+        alert.classList.remove('alertError');
+        alert.textContent = "";
+        }, 5000);
+        }
+        })
+        /*
+        fetch("https://formsubmit.co/ajax/origeneexploral@gmail.com", {
+        method: "POST",
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+        name: "FormSubmit",
+        message: "I'm from Devro LABS"
+        })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error)); */
+        })();
+    </script>
+
+
+</body>
+
+</html>
